@@ -34,11 +34,13 @@ class ERPObj(scrapy.Spider):
 
 
 
-    def __init__(self,dets, *args, **kwargs):
+    def __init__(self,dets, uid="", *args, **kwargs):
         super().__init__(*args, **kwargs)
+        # print(dets)
         for i in dets:
             self.cookies[i]=dets[i]
-        print(self.cookies)
+        self.uid = uid
+        # print("Cookies : ",self.cookies)
 
     def start_requests(self):
         for i in self.start_urls:
@@ -101,13 +103,22 @@ class ERPObj(scrapy.Spider):
         text = response.css(".redflag::text")[0].extract().strip()
         for i in response.css("table thead tr th::text").getall():
             if "weighted" in i.lower():
-                print("COUNT : ", count)
+                # print("COUNT : ", count)
                 count+=1
                 break
             count+=1
         marks = response.css(f"td:nth-child({count})::text").get()
         yield {
-            "name":sname,
-            "component":text,
-            "awarded":marks
+            "uid":self.uid,
+            "comps": {
+                "name": sname,
+                "component": text,
+                "awarded": marks
+            }
         }
+        # yield {
+        #     "uid":self.uid,
+        #     "name":sname,
+        #     "component":text,
+        #     "awarded":marks
+        # }
