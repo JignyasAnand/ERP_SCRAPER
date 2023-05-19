@@ -1,0 +1,24 @@
+Method: POST
+URL: https://newerp.kluniversity.in/index.php?r=studentinfo%2Fstudentendexamresult%2Fgetstudentinternalmarks
+Headers:
+	b'Host': [b'newerp.kluniversity.in']
+	b'Content-Length': [b'161']
+	b'Cache-Control': [b'max-age=0']
+	b'Sec-Ch-Ua': [b'"Not:A-Brand";v="99", "Chromium";v="112"']
+	b'Sec-Ch-Ua-Mobile': [b'?0']
+	b'Sec-Ch-Ua-Platform': [b'macOS']
+	b'Upgrade-Insecure-Requests': [b'1']
+	b'Origin': [b'https://newerp.kluniversity.in']
+	b'Content-Type': [b'application/x-www-form-urlencoded']
+	b'User-Agent': [b'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.5615.50 Safari/537.36']
+	b'Accept': [b'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7']
+	b'Sec-Fetch-Site': [b'same-origin']
+	b'Sec-Fetch-Mode': [b'navigate']
+	b'Sec-Fetch-User': [b'?1']
+	b'Sec-Fetch-Dest': [b'document']
+	b'Referer': [b'https://newerp.kluniversity.in/index.php?r=studentinfo%2Fstudentendexamresult%2Fgetstudentinternalmarks']
+	b'Accept-Encoding': [b'gzip, deflate']
+	b'Accept-Language': [b'en-US,en;q=0.9']
+	b'Connection': [b'close']
+	b'Cookie': [b'SERVERID=erp; PHPSESSID=532rdiv8f75s2rd0nf1ohoh6j1; _csrf=bc06fa195a3e01e825b51cbbfa5e475b444448982fb0f6da298beb488bb70307a%3A2%3A%7Bi%3A0%3Bs%3A5%3A%22_csrf%22%3Bi%3A1%3Bs%3A32%3A%22OgSGZ11uV2K133r8_zf3RRDl48sHzZZU%22%3B%7D']
+Body: _csrf=yrtPXZYEvktqJLruEPWf6C7pKBrk13Iz-hEy69DFl3yF3BwazDWPPjwW8d8jxu3QcZNOKbaFNl_OKUGjqp_NKQ%3D%3D&DynamicModel%5Bacademicyear%5D=14&DynamicModel%5Bsemester%5D=2
