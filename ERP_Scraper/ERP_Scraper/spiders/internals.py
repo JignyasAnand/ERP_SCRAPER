@@ -95,8 +95,8 @@ class ERPObj(scrapy.Spider):
                         callback=self.temp3,
                         cb_kwargs={"sname": name},
                     )
-                break
-            break
+                # break
+            # break
 
     def temp3(self, response,sname, **kwargs):
         count=0
