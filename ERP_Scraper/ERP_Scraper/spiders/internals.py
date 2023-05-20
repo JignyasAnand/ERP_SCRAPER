@@ -34,11 +34,13 @@ class ERPObj(scrapy.Spider):
 
 
 
-    def __init__(self,dets, uid="", *args, **kwargs):
+    def __init__(self,dets, uid="",year="", sem="", *args, **kwargs):
         super().__init__(*args, **kwargs)
         # print(dets)
         for i in dets:
             self.cookies[i]=dets[i]
+        self.year = year
+        self.sem = sem
         self.uid = uid
         # print("Cookies : ",self.cookies)
 
@@ -63,8 +65,8 @@ class ERPObj(scrapy.Spider):
 
         payload={
             "_csrf":csrf,
-            "DynamicModel[academicyear]":"14",
-            "DynamicModel[semester]":"1"
+            "DynamicModel[academicyear]":self.year,
+            "DynamicModel[semester]":self.sem
         }
 
         url1 = "https://newerp.kluniversity.in/index.php?r=studentinfo%2Fstudentendexamresult%2Fgetstudentinternalmarks"
@@ -73,7 +75,7 @@ class ERPObj(scrapy.Spider):
             url=url1,
             method="POST",
             formdata=payload,
-            body=f"_csrf={csrf}%3D%3D&DynamicModel%5Bacademicyear%5D=14&DynamicModel%5Bsemester%5D=2",
+            body=f"_csrf={csrf}%3D%3D&DynamicModel%5Bacademicyear%5D={self.year}&DynamicModel%5Bsemester%5D={self.sem}",
             headers=self.headers,
             cookies=self.cookies,
             callback=self.temp2
@@ -99,6 +101,7 @@ class ERPObj(scrapy.Spider):
             # break
 
     def temp3(self, response,sname, **kwargs):
+        print(self.year,self.sem)
         count=0
         text = response.css(".redflag::text")[0].extract().strip()
         for i in response.css("table thead tr th::text").getall():
@@ -114,7 +117,8 @@ class ERPObj(scrapy.Spider):
                 "name": sname,
                 "component": text,
                 "awarded": marks
-            }
+            },
+            "type":"internals"
         }
         # yield {
         #     "uid":self.uid,

@@ -29,9 +29,14 @@ class ERP_END(scrapy.Spider):
             "_csrf": "5f6e00ec69603cf6767219adf15ccf604bd8598a74afa5cd8c09a30cb8928fe7a%3A2%3A%7Bi%3A0%3Bs%3A5%3A%22_csrf%22%3Bi%3A1%3Bs%3A32%3A%22PsQXOimRjS50c3KZPDkvJxu7Pt70PfUK%22%3B%7D"
              }
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self,dets, uid="",year="", sem="", *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # open("op2.json", "w")
+        # print(dets)
+        for i in dets:
+            self.cookies[i]=dets[i]
+        self.year=year
+        self.sem=sem
+        self.uid = uid
 
     def start_requests(self):
         for i in self.start_urls:
@@ -58,8 +63,8 @@ class ERP_END(scrapy.Spider):
 
         payload={
             "_csrf":csrf,
-            "DynamicModel[academicyear]":"14",
-            "DynamicModel[semester]":"1"
+            "DynamicModel[academicyear]":self.year,
+            "DynamicModel[semester]":self.sem
         }
 
         url1 = "https://newerp.kluniversity.in/index.php?r=studentinfo%2Fstudentendexamresult%2Fsemendresult"
@@ -67,24 +72,31 @@ class ERP_END(scrapy.Spider):
         yield scrapy.FormRequest(
             url=url1,
             method="POST",
-            formdata=payload,
-            body=f"_csrf={csrf}%3D%3D&DynamicModel%5Bacademicyear%5D=14&DynamicModel%5Bsemester%5D=2",
+            # formdata=payload,
+            body=f"_csrf={csrf}%3D%3D&DynamicModel%5Bacademicyear%5D={self.year}&DynamicModel%5Bsemester%5D={self.sem}",
             headers=self.headers2,
             cookies=self.cookies,
             callback=self.temp2
         )
 
     def temp2(self, response, **kwargs):
-        print("+_+_"*100)
+        # print("+_+_"*100)
 
         table = response.css("table tbody tr")
 
         for i in table:
-            print("++++++"*70)
+            # print("++++++"*70)
             # print(i.css("td::text").getall())
             sub_names=i.css("td:nth-child(5)::text").get()
             marks=i.css("td:nth-child(7)::text").get()
+            # print(sub_names)
+            # print(marks)
             yield {
-                "sub":sub_names,
-                "marks":marks
+                "uid":self.uid,
+                "comps":
+                    {
+                        "sub": sub_names,
+                        "marks": marks
+                     },
+                "type":"endsem"
             }

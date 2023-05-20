@@ -11,8 +11,11 @@ from scrapy.crawler import CrawlerRunner
 from scrapy.signalmanager import dispatcher
 import time
 from uuid import uuid4
+from multiprocessing import Process
+
 
 from ERP_Scraper.ERP_Scraper.spiders.internals import ERPObj
+from ERP_Scraper.ERP_Scraper.spiders.endexam import ERP_END
 from ERP_Scraper.ERP_Scraper.spiders.test2 import SP
 
 application = Flask(__name__)
@@ -37,9 +40,12 @@ def getdata():
 def scrape():
     data = request.get_json()
     session_id = data.get('session_id')
+    method = data.get("method")
+
+    # p=Process(target=scrape_with_crochet, args=(data, ))
+    # p.start()
 
     scrape_with_crochet(data)
-
     time.sleep(5)
 
 
@@ -50,7 +56,7 @@ def scrape():
 def results(var):
     uid, top = var.split("|||")
     res = sqlobj.get(uid, top)
-    sqlobj.delete(uid)
+    # sqlobj.delete(uid)
     return jsonify(res)
 
 @crochet.run_in_reactor
@@ -58,14 +64,20 @@ def scrape_with_crochet(data):
     # print("Session",data)
     dispatcher.connect(_crawler_result, signal=signals.item_scraped)
 
-    eventual = crawl_runner.crawl(ERPObj, dets=data.get('cookies', {}), uid=data.get("session_id"))
+    eventual = None
+    if data["method"]=="internals":
+        eventual = crawl_runner.crawl(ERPObj, dets=data.get('cookies', {}), uid=data.get("session_id"), year=data.get("year"), sem=data.get("sem"))
+    elif data["method"]=="endsem":
+        eventual = crawl_runner.crawl(ERP_END, dets=data.get('cookies', {}), uid=data.get("session_id"), year=data.get("year"), sem=data.get("sem"))
+
     return eventual
 
 
 def _crawler_result(item, response, spider):
     item = dict(item)
+    print(item)
     # print("item",item)
-    sqlobj.insert(item["uid"],item["comps"],"internals")
+    sqlobj.insert(item["uid"],item["comps"],item["type"])
 
 
 
