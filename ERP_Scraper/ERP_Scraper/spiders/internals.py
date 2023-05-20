@@ -101,7 +101,7 @@ class ERPObj(scrapy.Spider):
             # break
 
     def temp3(self, response,sname, **kwargs):
-        print(self.year,self.sem)
+        # print(self.year,self.sem)
         count=0
         text = response.css(".redflag::text")[0].extract().strip()
         for i in response.css("table thead tr th::text").getall():

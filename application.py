@@ -56,7 +56,7 @@ def scrape():
 def results(var):
     uid, top = var.split("|||")
     res = sqlobj.get(uid, top)
-    # sqlobj.delete(uid)
+    sqlobj.delete(uid)
     return jsonify(res)
 
 @crochet.run_in_reactor
@@ -75,7 +75,7 @@ def scrape_with_crochet(data):
 
 def _crawler_result(item, response, spider):
     item = dict(item)
-    print(item)
+    # print(item)
     # print("item",item)
     sqlobj.insert(item["uid"],item["comps"],item["type"])
 
