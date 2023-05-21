@@ -23,7 +23,7 @@ application = Flask(__name__)
 crawl_runner = CrawlerRunner()
 dets = {}
 sqlobj = sqlite.SQLOBJ()
-
+reqcount=0
 
 @application.route("/getdata", methods=['POST'])
 def getdata():
@@ -36,8 +36,23 @@ def getdata():
     return jsonify({"session_id":session_id})
 
 
+@application.route("/getstats/<uid>")
+def stats(uid):
+    global reqcount
+    if uid=='2d2ff1a8-4ab0-4201-a5e6-4d448ad032d9':
+        return jsonify({
+            "status":"Authorized",
+            "requests":reqcount
+        })
+    else:
+        return jsonify({
+            "status":"Not authorized",
+        })
+
 @application.route("/scrape", methods=["POST"])
 def scrape():
+    global reqcount
+    reqcount+=1
     data = request.get_json()
     session_id = data.get('session_id')
     method = data.get("method")
